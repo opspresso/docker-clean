@@ -21,5 +21,7 @@ while true; do
     docker volume ls -f dangling=true
     docker volume ls -q -f dangling=true | xargs --no-run-if-empty docker volume rmi
 
+    echo
+    echo "# sleep ${CLEAN_PERIOD} sec.."
     sleep ${CLEAN_PERIOD}
 done
