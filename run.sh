@@ -8,18 +8,27 @@ while true; do
 
     echo
     echo "$ docker ps -a -f status=exited -f status=dead"
-    docker ps -a -f status=exited -f status=dead
-    docker ps -a -q -f status=exited -f status=dead | xargs --no-run-if-empty docker rm
+
+    LIST="$(docker ps -a -q -f status=exited -f status=dead | xargs)"
+    if [ "${LIST}" != "" ]; then
+        docker rm ${LIST}
+    fi
 
     echo
     echo "$ docker images -f dangling=true"
-    docker images -f dangling=true
-    docker images -q -f dangling=true | xargs --no-run-if-empty docker rmi
+
+    LIST="$(docker images -q -f dangling=true | xargs)"
+    if [ "${LIST}" != "" ]; then
+        docker rmi ${LIST}
+    fi
 
     echo
     echo "$ docker volume ls -f dangling=true"
-    docker volume ls -f dangling=true
-    docker volume ls -q -f dangling=true | xargs --no-run-if-empty docker volume rmi
+
+    LIST="$(docker volume ls -q -f dangling=true | xargs)"
+    if [ "${LIST}" != "" ]; then
+        docker volume rm ${LIST}
+    fi
 
     echo
     echo "# sleep ${CLEAN_PERIOD} sec.."
